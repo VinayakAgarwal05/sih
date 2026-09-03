@@ -1,0 +1,1 @@
+{"name":"saarthi-ai-backend","version":"1.0.0","type":"module","scripts":{"start":"node server.js"},"dependencies":{"cors":"latest","express":"latest","helmet":"latest","morgan":"latest","express-rate-limit":"latest"}}
