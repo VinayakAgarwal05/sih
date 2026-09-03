@@ -16,11 +16,6 @@ __pycache__/
 venv/
 env/
 
-# Build
-dist/
-build/
-.next/
-
 # IDE
 .vscode/
 .idea/
