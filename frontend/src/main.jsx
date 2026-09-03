@@ -1,50 +1,2836 @@
-import React,{useEffect,useState} from 'react';
-import {createRoot} from 'react-dom/client';
-import {LineChart,Line,XAxis,YAxis,Tooltip,ResponsiveContainer,BarChart,Bar,CartesianGrid} from 'recharts';
-import {Shield,LayoutDashboard,Users,AlertTriangle,HeartHandshake,Activity,Lock,ClipboardCheck,LogOut,ChevronRight,CheckCircle2,Clock3,Eye,Menu,BrainCircuit,TrendingUp,Database,FileCheck2,CalendarDays,CalendarCheck,History,ShieldCheck,Sparkles,X,UserRound,MapPin,BriefcaseBusiness,Phone,Mail,Check,Minus} from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { createRoot } from 'react-dom/client';
+
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  CartesianGrid,
+} from 'recharts';
+
+import {
+  Shield,
+  LayoutDashboard,
+  Users,
+  AlertTriangle,
+  HeartHandshake,
+  Activity,
+  Lock,
+  ClipboardCheck,
+  LogOut,
+  ChevronRight,
+  CheckCircle2,
+  Clock3,
+  Eye,
+  Menu,
+  BrainCircuit,
+  TrendingUp,
+  Database,
+  FileCheck2,
+  CalendarDays,
+  CalendarCheck,
+  History,
+  ShieldCheck,
+  Sparkles,
+  X,
+  UserRound,
+  MapPin,
+  BriefcaseBusiness,
+  Phone,
+  Mail,
+  Check,
+  Minus,
+} from 'lucide-react';
+
 import './styles.css';
 
-const people=[
- {id:'P-1042',name:'Personnel A',unit:'Alpha',role:'Field Operations',risk:88,level:'HIGH',days:6,trend:'Increasing',workload:32,rest:18,night:4,deployment:14,leave:2,leaveLeft:16,attendance:94,leavePattern:'2 short leave requests · last 90 days',wellness:58,review:true,history:[{d:'D1',r:42},{d:'D2',r:48},{d:'D3',r:59},{d:'D4',r:67},{d:'D5',r:81},{d:'D6',r:85},{d:'D7',r:88}]},
- {id:'P-1192',name:'Personnel B',unit:'Bravo',role:'Operations',risk:84,level:'HIGH',days:5,trend:'Increasing',workload:27,rest:15,night:5,deployment:10,leave:1,leaveLeft:9,attendance:89,leavePattern:'1 medical leave · last 90 days',wellness:62,review:true,history:[{d:'D1',r:50},{d:'D2',r:57},{d:'D3',r:65},{d:'D4',r:74},{d:'D5',r:84}]},
- {id:'P-0873',name:'Personnel C',unit:'Charlie',role:'Logistics',risk:73,level:'ELEVATED',days:3,trend:'Increasing',workload:19,rest:10,night:3,deployment:8,leave:1,leaveLeft:12,attendance:96,leavePattern:'1 planned leave block · last 90 days',wellness:69,review:false,history:[{d:'D1',r:51},{d:'D2',r:57},{d:'D3',r:64},{d:'D4',r:69},{d:'D5',r:73}]},
- {id:'P-2011',name:'Personnel D',unit:'Alpha',role:'Communications',risk:48,level:'MODERATE',days:0,trend:'Stable',workload:6,rest:3,night:1,deployment:4,leave:0,leaveLeft:21,attendance:98,leavePattern:'No leave taken · last 90 days',wellness:82,review:false,history:[{d:'D1',r:44},{d:'D2',r:47},{d:'D3',r:45},{d:'D4',r:49},{d:'D5',r:48}]},
- {id:'P-2304',name:'Personnel E',unit:'Delta',role:'Support',risk:29,level:'LOW',days:0,trend:'Improving',workload:-4,rest:-2,night:0,deployment:1,leave:0,leaveLeft:18,attendance:97,leavePattern:'1 planned leave block · last 90 days',wellness:91,review:false,history:[{d:'D1',r:38},{d:'D2',r:35},{d:'D3',r:33},{d:'D4',r:31},{d:'D5',r:29}]}
+/* =========================================================
+   DEMO DATA
+========================================================= */
+
+const people = [
+  {
+    id: 'P-1042',
+    name: 'Personnel A',
+    unit: 'Alpha',
+    role: 'Field Operations',
+    risk: 88,
+    level: 'HIGH',
+    days: 6,
+    trend: 'Increasing',
+    workload: 32,
+    rest: 18,
+    night: 4,
+    deployment: 14,
+    leave: 2,
+    leaveLeft: 16,
+    attendance: 94,
+    leavePattern: '2 short leave requests · last 90 days',
+    wellness: 58,
+    review: true,
+    history: [
+      { d: 'D1', r: 42 },
+      { d: 'D2', r: 48 },
+      { d: 'D3', r: 59 },
+      { d: 'D4', r: 67 },
+      { d: 'D5', r: 81 },
+      { d: 'D6', r: 85 },
+      { d: 'D7', r: 88 },
+    ],
+  },
+  {
+    id: 'P-1192',
+    name: 'Personnel B',
+    unit: 'Bravo',
+    role: 'Operations',
+    risk: 84,
+    level: 'HIGH',
+    days: 5,
+    trend: 'Increasing',
+    workload: 27,
+    rest: 15,
+    night: 5,
+    deployment: 10,
+    leave: 1,
+    leaveLeft: 9,
+    attendance: 89,
+    leavePattern: '1 medical leave · last 90 days',
+    wellness: 62,
+    review: true,
+    history: [
+      { d: 'D1', r: 50 },
+      { d: 'D2', r: 57 },
+      { d: 'D3', r: 65 },
+      { d: 'D4', r: 74 },
+      { d: 'D5', r: 84 },
+    ],
+  },
+  {
+    id: 'P-0873',
+    name: 'Personnel C',
+    unit: 'Charlie',
+    role: 'Logistics',
+    risk: 73,
+    level: 'ELEVATED',
+    days: 3,
+    trend: 'Increasing',
+    workload: 19,
+    rest: 10,
+    night: 3,
+    deployment: 8,
+    leave: 1,
+    leaveLeft: 12,
+    attendance: 96,
+    leavePattern: '1 planned leave block · last 90 days',
+    wellness: 69,
+    review: false,
+    history: [
+      { d: 'D1', r: 51 },
+      { d: 'D2', r: 57 },
+      { d: 'D3', r: 64 },
+      { d: 'D4', r: 69 },
+      { d: 'D5', r: 73 },
+    ],
+  },
+  {
+    id: 'P-2011',
+    name: 'Personnel D',
+    unit: 'Alpha',
+    role: 'Communications',
+    risk: 48,
+    level: 'MODERATE',
+    days: 0,
+    trend: 'Stable',
+    workload: 6,
+    rest: 3,
+    night: 1,
+    deployment: 4,
+    leave: 0,
+    leaveLeft: 21,
+    attendance: 98,
+    leavePattern: 'No leave taken · last 90 days',
+    wellness: 82,
+    review: false,
+    history: [
+      { d: 'D1', r: 44 },
+      { d: 'D2', r: 47 },
+      { d: 'D3', r: 45 },
+      { d: 'D4', r: 49 },
+      { d: 'D5', r: 48 },
+    ],
+  },
+  {
+    id: 'P-2304',
+    name: 'Personnel E',
+    unit: 'Delta',
+    role: 'Support',
+    risk: 29,
+    level: 'LOW',
+    days: 0,
+    trend: 'Improving',
+    workload: -4,
+    rest: -2,
+    night: 0,
+    deployment: 1,
+    leave: 0,
+    leaveLeft: 18,
+    attendance: 97,
+    leavePattern: '1 planned leave block · last 90 days',
+    wellness: 91,
+    review: false,
+    history: [
+      { d: 'D1', r: 38 },
+      { d: 'D2', r: 35 },
+      { d: 'D3', r: 33 },
+      { d: 'D4', r: 31 },
+      { d: 'D5', r: 29 },
+    ],
+  },
 ];
-const units=[['Alpha',420,9,18],['Bravo',390,11,22],['Charlie',370,5,13],['Delta',450,2,8],['Echo',360,4,10]];
-const roles={personnel:'Personnel',welfare:'Welfare Officer',commander:'Commander',admin:'Administrator'};
 
-function riskClass(level){return level==='HIGH'?'high':level==='ELEVATED'?'elevated':level==='MODERATE'?'moderate':'low'}
+const units = [
+  ['Alpha', 420, 9, 18],
+  ['Bravo', 390, 11, 22],
+  ['Charlie', 370, 5, 13],
+  ['Delta', 450, 2, 8],
+  ['Echo', 360, 4, 10],
+];
 
-function AIOrb(){return <div className="aiScene" aria-label="SAARTHI AI intelligence visualization"><div className="orbHalo halo1"/><div className="orbHalo halo2"/><div className="aiOrb"><div className="orbGrid"/><div className="orbCore"><BrainCircuit size={34}/><span>AI</span></div></div><div className="orbit orbitA"><i/><i/><i/></div><div className="orbit orbitB"><i/><i/></div><div className="dataNode nodeA"><Activity size={13}/> DUTY</div><div className="dataNode nodeB"><Database size={13}/> HR</div><div className="dataNode nodeC"><HeartHandshake size={13}/> WELLNESS</div><div className="dataNode nodeD"><Shield size={13}/> WELFARE</div></div>}
+const roles = {
+  personnel: 'Personnel',
+  welfare: 'Welfare Officer',
+  commander: 'Commander',
+  admin: 'Administrator',
+};
 
-function Header({role,onLogout,onMenu}){return <header><div className="brand"><button className="iconBtn mobile" onClick={onMenu}><Menu size={20}/></button><div className="logo"><Shield size={22}/></div><div><strong>SAARTHI <span>AI</span></strong><small>Personnel Welfare Intelligence</small></div></div><div className="headerRight"><div className="secure"><Lock size={14}/> Privacy-first</div><div className="rolePill">{roles[role]}</div><InsightPopover/><button className="iconBtn" onClick={onLogout}><LogOut size={17}/></button></div><HoverAtmosphere/><ModelShelf/></header>}
-function Sidebar({role,page,setPage,open}){let items=role==='personnel'?[['home','My Wellness',HeartHandshake],['my-attendance','My Attendance',CalendarCheck],['checkin','Daily Check-in',ClipboardCheck],['privacy','Privacy & Consent',Lock]]:role==='commander'?[['overview','Command Overview',LayoutDashboard],['workload','Workload Analytics',Activity],['trends','Welfare Trends',TrendingUp]]:role==='admin'?[['admin-personnel','Personnel',Users],['admin-attendance','Attendance',CalendarCheck],['admin-history','Personnel History',History],['audit','Audit Log',FileCheck2],['privacy','Trust Center',Lock]]:[['dashboard','Welfare Dashboard',LayoutDashboard],['reviews','Priority Reviews',AlertTriangle],['personnel','Personnel',Users],['interventions','Interventions',HeartHandshake],['privacy','Trust Center',Lock],['audit','Audit Log',FileCheck2]];return <aside className={open?'open':''}><div className="navTitle">WORKSPACE</div>{items.map(([id,label,I])=><button key={id} className={page===id?'nav active':'nav'} onClick={()=>setPage(id)}><I size={18}/>{label}<ChevronRight size={15}/></button>)}<div className="sideFoot"><Database size={16}/><div><b>Synthetic Demo Data</b><span>No real personnel data</span></div></div></aside>}
-function Card({children,className=''}){return <section className={'card '+className}>{children}</section>}
-function HoverAtmosphere(){useEffect(()=>{const move=e=>{document.documentElement.style.setProperty('--mouse-x',e.clientX+'px');document.documentElement.style.setProperty('--mouse-y',e.clientY+'px')};window.addEventListener('pointermove',move,{passive:true});return()=>window.removeEventListener('pointermove',move)},[]);return <div className="cursorGlow" aria-hidden="true"/>}
-function ModelShelf(){return <div className="modelShelf" aria-hidden="true"><div className="model modelCube"><i/><i/><i/></div><div className="model modelPyramid"><i/><i/><i/><i/></div><div className="model modelRing"><i/></div></div>}
-function InsightPopover(){const [open,setOpen]=useState(false);return <div className="insightWrap"><button className="insightButton" onClick={()=>setOpen(!open)} aria-expanded={open}><Sparkles size={15}/><span>Live insight</span><i/></button>{open&&<div className="insightPopover"><button className="closeInsight" onClick={()=>setOpen(false)} aria-label="Close live insight"><X size={14}/></button><span className="eyebrow">SAARTHI MOMENT</span><b>Small changes deserve attention.</b><p>Review workload and recovery patterns together before making any welfare decision.</p><button className="textBtn" onClick={()=>setOpen(false)}>Got it <ChevronRight size={15}/></button></div>}</div>}
-function Stat({label,value,sub,icon:I,tone}){return <Card className="stat"><div className={'statIcon '+(tone||'')}><I size={19}/></div><div><small>{label}</small><strong>{value}</strong><span>{sub}</span></div></Card>}
-function RiskBadge({level}){return <span className={'riskBadge '+riskClass(level)}><i/>{level}</span>}
-function PriorityReviews({setSelected}){const [filter,setFilter]=useState('All');const visible=people.filter(p=>filter==='All'||p.level===filter);return <><div className="pageHead"><div><span className="eyebrow">REVIEW QUEUE</span><h1>Priority welfare reviews</h1><p>Focused queue for authorized, human-led follow-up.</p></div></div><div className="reviewFilters">{['All','HIGH','ELEVATED'].map(x=><button key={x} className={filter===x?'selected':''} onClick={()=>setFilter(x)}>{x==='All'?'All records':x}</button>)}</div><Card><div className="cardHead"><div><h2>Review queue</h2><p>{visible.length} records matched · sorted by current risk</p></div><span className="miniTag">Action required</span></div><div className="reviewQueue">{visible.sort((a,b)=>b.risk-a.risk).map(p=><button className="reviewItem" key={p.id} onClick={()=>setSelected(p)}><div className="avatar">{p.id.slice(-2)}</div><div><b>{p.id} · {p.name}</b><span>{p.unit} Unit · {p.days||0} days persistent</span></div><RiskBadge level={p.level}/><strong>{p.risk}</strong><ChevronRight size={17}/></button>)}</div></Card></>}
-function WorkloadAnalytics(){const load=[['Night-duty coverage',68,'balanced'],['Deployment extension',82,'watch'],['Rest-day utilization',47,'healthy'],['Shift handovers',74,'watch']];return <><div className="pageHead"><div><span className="eyebrow">WORKLOAD ANALYTICS</span><h1>Operational load signals</h1><p>Find pressure points in work design before they become welfare concerns.</p></div></div><div className="workloadGrid">{load.map(([label,value,status])=><Card className="workloadMetric" key={label}><span>{label}</span><strong>{value}<small>/100</small></strong><div className="loadBar"><i className={status} style={{width:value+'%'}}/></div><p>{status==='watch'?'Review distribution this week':'Within expected range'}</p></Card>)}</div><Card><div className="cardHead"><div><h2>Planning note</h2><p>Suggested organizational action based on this week’s aggregated operational patterns.</p></div><Activity/></div><div className="notice"><Clock3/><div><b>Rebalance extended deployments in Bravo Unit.</b><p>Shift coverage and rest intervals show the highest combined workload signal. Use roster planning, not individual labels, to respond.</p></div></div></Card></>}
-function DailyCheckin(){const [done,setDone]=useState(false);const [mood,setMood]=useState(null);return <><div className="pageHead"><div><span className="eyebrow">PRIVATE DAILY CHECK-IN</span><h1>Take a moment</h1><p>Your optional check-in is separate from operational records.</p></div></div><Card className="wellnessCard checkinPage"><div className="checkTop"><div><h2>How has today felt?</h2><p>Choose the closest answer. You can skip this at any time.</p></div><ClipboardCheck/></div><div className="moods">{['😄','🙂','😐','😟','😣'].map((m,i)=><button key={m} onClick={()=>setMood(i)} className={mood===i?'selected':''}>{m}<small>{['Good','Okay','Low','Difficult','Very difficult'][i]}</small></button>)}</div><div className="checkGrid"><div><span>Energy</span><strong>Select how you feel</strong></div><div><span>Rest</span><strong>Private self-report</strong></div><div><span>Pressure</span><strong>Optional context</strong></div></div>{done&&<div className="success"><CheckCircle2/> Check-in saved locally for this demonstration.</div>}<button className="primary full" onClick={()=>setDone(true)} disabled={mood===null}>Save private check-in</button></Card></>}
-function WellnessHome(){const me=people[0];return <><div className="mobileHero"><span className="eyebrow">MY WELLNESS · PRIVATE</span><h1>Good evening</h1><p>A calm view of your work rhythm and available support.</p></div><div className="leaveSummary"><Card className="leaveMetric"><CalendarCheck/><div><span>Attendance</span><strong>{me.attendance}%</strong><small>Last 90 days · on target</small></div></Card><Card className="leaveMetric"><CalendarDays/><div><span>Leave remaining</span><strong>{me.leaveLeft} days</strong><small>Annual entitlement · 24 days</small></div></Card><Card className="leaveMetric"><History/><div><span>Leave used</span><strong>{24-me.leaveLeft} days</strong><small>{me.leavePattern}</small></div></Card></div><Card><div className="cardHead"><div><h2>What the system is noticing</h2><p>Feedback without exposing a manipulable “recovery score”</p></div><Activity/></div><div className="notice"><TrendingUp/><div><b>Recent workload is above your usual pattern.</b><p>Your authorized duty data shows a sustained increase compared with your personal baseline.</p></div></div><div className="notice"><HeartHandshake/><div><b>Support is available.</b><p>You can access confidential welfare resources without changing your duty record.</p></div></div></Card></>}
-function Dashboard({setSelected,onViewAll}){const counts={high:people.filter(p=>p.level==='HIGH').length,elev:people.filter(p=>p.level==='ELEVATED').length};const trend=[{d:'Mon',risk:51},{d:'Tue',risk:59},{d:'Wed',risk:55},{d:'Thu',risk:67},{d:'Fri',risk:63},{d:'Sat',risk:76},{d:'Sun',risk:71}];return <><div className="heroCommand"><div className="pageHead"><div><span className="eyebrow">WELFARE COMMAND CENTER</span><h1>Good evening, Welfare Officer</h1><p>Early-warning intelligence for personnel welfare — human review remains the decision point.</p><div className="heroSignals"><span><i/> Personal baseline</span><span><i/> Trend analysis</span><span><i/> Human oversight</span></div></div><div className="live"><i/> DATA PIPELINE ACTIVE</div></div><AIOrb/></div><div className="stats"><Stat label="Personnel monitored" value="2,480" sub="Synthetic demo population" icon={Users}/><Stat label="High risk" value={counts.high+9} sub="Priority welfare review" icon={AlertTriangle} tone="danger"/><Stat label="Elevated" value={counts.elev+31} sub="Continue observation" icon={TrendingUp} tone="warn"/><Stat label="Reviews pending" value="7" sub="Human action required" icon={Clock3} tone="info"/></div><div className="grid2 dashboardAnalytics"><Card><div className="cardHead"><div><h2>Welfare risk trajectory</h2><p>Unit-wide aggregate signal · last 7 days</p></div><span className="miniTag">Dynamic pattern</span></div><div className="chart"><ResponsiveContainer width="100%" height={245}><LineChart data={trend}><CartesianGrid strokeDasharray="3 3" vertical={false}/><XAxis dataKey="d"/><YAxis domain={[0,100]}/><Tooltip/><Line type="monotone" dataKey="risk" strokeWidth={4} dot={{r:4}} activeDot={{r:8}} animationDuration={1900} animationEasing="ease-in-out"/></LineChart></ResponsiveContainer></div></Card><Card><div className="cardHead"><div><h2>Risk distribution</h2><p>Current synthetic population</p></div></div><div className="donut"><div className="donutCore"><strong>2,480</strong><span>monitored</span></div></div><div className="legend"><span><i className="dot lowdot"/>Low <b>2,116</b></span><span><i className="dot moddot"/>Moderate <b>187</b></span><span><i className="dot evdot"/>Elevated <b>148</b></span><span><i className="dot hidot"/>High <b>29</b></span></div></Card></div><Card className="reviewsCard"><div className="cardHead"><div><h2>Priority welfare reviews</h2><p>Persistent elevated risk requires authorized human review</p></div><button className="textBtn viewAllBtn" onClick={onViewAll}>View all <ChevronRight size={16}/></button></div><div className="tableWrap"><table><thead><tr><th>PERSONNEL</th><th>RISK</th><th>PERSISTENCE</th><th>TREND</th><th>PRIMARY SIGNAL</th><th></th></tr></thead><tbody>{people.filter(p=>p.review).map(p=><tr key={p.id} onClick={()=>setSelected(p)}><td><div className="person"><div className="avatar">{p.id.slice(-2)}</div><div><b>{p.id}</b><span>{p.name} · {p.unit}</span></div></div></td><td><RiskBadge level={p.level}/><strong className="riskNum">{p.risk}</strong></td><td>{p.days} days</td><td><span className="trendUp">↗ {p.trend}</span></td><td>{p.workload>25?'Sustained workload + reduced rest':'Operational load pattern'}</td><td><ChevronRight size={18}/></td></tr>)}</tbody></table></div></Card></>}
-function PersonDetail({person,onBack,onIntervene}){if(!person)return null;const factors=[['Workload deviation',person.workload],['Reduced rest',person.rest],['Night duty',person.night],['Deployment extension',person.deployment],['Leave pattern',person.leave]];return <><div className="back" onClick={onBack}>← Back to reviews</div><div className="pageHead compact"><div><span className="eyebrow">CONFIDENTIAL WELFARE REVIEW · {person.id}</span><h1>{person.name}</h1><p>{person.role} · Unit {person.unit} · Pseudonymous demo record</p></div><RiskBadge level={person.level}/></div><div className="detailGrid"><Card><div className="cardHead"><div><h2>Risk trajectory</h2><p>Persistent elevated signal: {person.days} days</p></div><div className="bigRisk">{person.risk}<small>/100</small></div></div><div className="chart"><ResponsiveContainer width="100%" height={250}><LineChart data={person.history}><CartesianGrid strokeDasharray="3 3" vertical={false}/><XAxis dataKey="d"/><YAxis domain={[0,100]}/><Tooltip/><Line type="monotone" dataKey="r" strokeWidth={3} dot={{r:4}}/></LineChart></ResponsiveContainer></div><div className="callout"><AlertTriangle size={18}/><div><b>Human-led review recommended</b><p>The prototype persistence policy is risk ≥80 for 5 consecutive days. This is an alert for welfare review, not a diagnosis or disciplinary action.</p></div></div></Card><Card><div className="cardHead"><div><h2>Why did risk increase?</h2><p>Explainable contributing indicators</p></div><Eye size={18}/></div>{factors.map(([name,val])=><div className="factor" key={name}><div><span>{name}</span><b>{val>0?'+':''}{val}%</b></div><div className="bar"><i style={{width:Math.min(100,Math.abs(val)*2.4)+'%'}}/></div></div>)}<div className="explain"><BrainCircuit size={18}/><p>“Risk elevation is primarily associated with sustained workload, reduced rest intervals and extended operational deployment relative to this person's baseline.”</p></div></Card></div><div className="detailGrid"><Card><div className="cardHead"><div><h2>Recommended welfare actions</h2><p>Recommendations for authorized human review</p></div></div><label className="check"><input type="checkbox" defaultChecked/> Review workload and duty distribution</label><label className="check"><input type="checkbox" defaultChecked/> Assess rest/recovery opportunity</label><label className="check"><input type="checkbox"/> Review leave availability</label><label className="check"><input type="checkbox" defaultChecked/> Offer confidential welfare support</label><button className="primary full" onClick={onIntervene}>Create welfare review</button></Card><Card><div className="cardHead"><div><h2>Data boundary</h2><p>What this screen intentionally does not expose</p></div><Lock size={18}/></div><ul className="clean"><li><CheckCircle2/> No diagnosis or mental-health label</li><li><CheckCircle2/> No disciplinary recommendation</li><li><CheckCircle2/> No location tracking</li><li><CheckCircle2/> No private messages or CCTV</li><li><CheckCircle2/> Personnel identity is pseudonymized in analytics</li></ul></Card></div></>}
-function PersonnelView({page}){const [done,setDone]=useState(false);const me=people[0];return <>{page==='privacy'?<Privacy/>:<><div className="mobileHero"><span className="eyebrow">MY WELLNESS · PRIVATE</span><h1>Good evening</h1><p>Your welfare space is designed to minimize manual reporting.</p></div><div className="leaveSummary"><Card className="leaveMetric"><CalendarCheck/><div><span>Attendance</span><strong>{me.attendance}%</strong><small>Last 90 days · on target</small></div></Card><Card className="leaveMetric"><CalendarDays/><div><span>Leave remaining</span><strong>{me.leaveLeft} days</strong><small>Annual entitlement · 24 days</small></div></Card><Card className="leaveMetric"><History/><div><span>Leave used</span><strong>{24-me.leaveLeft} days</strong><small>{me.leavePattern}</small></div></Card></div><Card className="wellnessCard"><div className="checkTop"><div><h2>Daily check-in</h2><p>Optional · takes less than 30 seconds</p></div><ClipboardCheck/></div><h3>How are you feeling today?</h3><div className="moods">{['😄','🙂','😐','😟','😣'].map((m,i)=><button key={m} onClick={()=>setDone(true)} className={done&&i===2?'selected':''}>{m}<small>{['Good','Okay','Low','Difficult','Very difficult'][i]}</small></button>)}</div><div className="checkGrid"><div><span>Energy</span><strong>Moderate</strong></div><div><span>Rest</span><strong>Below usual</strong></div><div><span>Pressure</span><strong>Moderate</strong></div></div>{done&&<div className="success"><CheckCircle2/> Check-in saved locally for this demo. No single response changes a welfare decision.</div>}<button className="primary full" onClick={()=>setDone(true)}>Save optional check-in</button></Card><Card><div className="cardHead"><div><h2>What the system is noticing</h2><p>Feedback without exposing a manipulable “recovery score”</p></div><Activity/></div><div className="notice"><TrendingUp/><div><b>Recent workload is above your usual pattern.</b><p>Your authorized duty data shows a sustained increase compared with your personal baseline.</p></div></div><div className="notice"><HeartHandshake/><div><b>Support is available.</b><p>You can access confidential welfare resources without changing your duty record.</p></div></div></Card></>}</>}
-function Privacy(){return <><div className="pageHead"><div><span className="eyebrow">TRUST CENTER</span><h1>Privacy & consent</h1><p>Control optional wellness data and understand who can access what.</p></div><Lock/></div><Card><div className="privacyRow"><div><b>Core HR/duty data</b><span>Used only for authorized welfare analytics in this prototype.</span></div><span className="enabled">Protected</span></div><div className="privacyRow"><div><b>Daily wellness check-ins</b><span>Optional self-reporting; you can withdraw future sharing.</span></div><label className="switch"><input type="checkbox" defaultChecked/><i/></label></div><div className="privacyRow"><div><b>Wearable / biometric signals</b><span>Optional and disabled by default in the prototype.</span></div><label className="switch"><input type="checkbox"/><i/></label></div><div className="privacyRow"><div><b>Access logging</b><span>Authorized access events are recorded for accountability.</span></div><span className="enabled">Always on</span></div></Card></>}
-function Commander({page}){const chart=[{u:'Alpha',v:72},{u:'Bravo',v:81},{u:'Charlie',v:54},{u:'Delta',v:42},{u:'Echo',v:47}];return <>{page==='trends'?<><div className="pageHead"><div><span className="eyebrow">WELFARE TRENDS</span><h1>Organization-level signals</h1><p>Aggregated analytics help leadership identify systemic workload pressure.</p></div></div><Card><h2>Unit welfare load</h2><p>Relative index for synthetic demonstration only.</p><div className="chart tall"><ResponsiveContainer width="100%" height={330}><BarChart data={chart}><CartesianGrid strokeDasharray="3 3" vertical={false}/><XAxis dataKey="u"/><YAxis domain={[0,100]}/><Tooltip/><Bar dataKey="v"/></BarChart></ResponsiveContainer></div></Card></>:<><div className="pageHead"><div><span className="eyebrow">COMMAND OVERVIEW</span><h1>Operational welfare picture</h1><p>Aggregate view — no individual psychological labels.</p></div></div><div className="stats"><Stat label="Personnel" value="1,990" sub="Across 5 units" icon={Users}/><Stat label="High / priority" value="29" sub="Welfare workflow" icon={AlertTriangle} tone="danger"/><Stat label="Avg duty load" value="8.7h" sub="7-day synthetic avg" icon={Activity}/><Stat label="Rest pressure" value="14%" sub="Above baseline" icon={TrendingUp} tone="warn"/></div><Card><div className="cardHead"><div><h2>Unit workload pressure</h2><p>Use this to identify organizational causes, not to label individuals.</p></div></div><div className="unitList">{units.map(([u,n,r,w])=><div className="unit" key={u}><div><b>{u} Unit</b><span>{n} personnel · {r} priority reviews</span></div><div className="unitBar"><i style={{width:w*3+'%'}}/></div><strong>{w}%</strong></div>)}</div></Card></>}</>}
-function Interventions(){const rows=[['P-1042','Workload review','In progress','Today'],['P-1192','Rest/recovery assessment','Scheduled','Tomorrow'],['P-0873','Welfare support offered','Completed','26 Aug']];return <><div className="pageHead"><div><span className="eyebrow">INTERVENTION TRACKING</span><h1>Welfare actions</h1><p>Close the loop: detection → review → support → follow-up.</p></div></div><Card><div className="tableWrap"><table><thead><tr><th>PERSONNEL</th><th>ACTION</th><th>STATUS</th><th>FOLLOW-UP</th></tr></thead><tbody>{rows.map(r=><tr key={r[0]}><td><b>{r[0]}</b></td><td>{r[1]}</td><td><span className="status">{r[2]}</span></td><td>{r[3]}</td></tr>)}</tbody></table></div></Card><div className="flow"><span>Detection</span><ChevronRight/><span>Human review</span><ChevronRight/><span>Intervention</span><ChevronRight/><span>Follow-up</span></div></>}
-function Audit(){return <><div className="pageHead"><div><span className="eyebrow">ACCOUNTABILITY</span><h1>Audit log</h1><p>Demonstration access events.</p></div></div><Card><div className="audit">{[['22:14','Welfare Officer','Viewed P-1042 risk explanation'],['21:58','Welfare Officer','Created welfare review for P-1192'],['21:32','Commander','Viewed Alpha aggregate workload'],['20:46','Administrator','Updated role permissions']].map(x=><div className="auditRow" key={x[0]}><Clock3/><b>{x[0]}</b><span>{x[1]}</span><p>{x[2]}</p></div>)}</div></Card></>}
-function App(){const [role,setRole]=useState('welfare');const [page,setPage]=useState('dashboard');const [selected,setSelected]=useState(null);const [sidebar,setSidebar]=useState(false);const [logged,setLogged]=useState(false);const landing=r=>r==='personnel'?'home':r==='commander'?'overview':r==='admin'?'admin-personnel':'dashboard';if(!logged)return <Login onLogin={(r)=>{setRole(r);setPage(landing(r));setLogged(true)}}/>;const content=role==='personnel'?page==='privacy'?<Privacy/>:page==='checkin'?<DailyCheckin/>:page==='my-attendance'?<MyAttendance/>:<WellnessHome/>:role==='commander'?page==='workload'?<WorkloadAnalytics/>:<Commander page={page}/>:role==='admin'?selected?<AdminPersonInfo person={selected} onBack={()=>setSelected(null)}/>:page==='admin-personnel'?<AdminPersonnel setSelected={setSelected}/>:page==='admin-attendance'?<AdminAttendance setSelected={setSelected}/>:page==='admin-history'?<AdminHistory setSelected={setSelected}/>:page==='audit'?<Audit/>:<Privacy/>:selected?<PersonDetail person={selected} onBack={()=>setSelected(null)} onIntervene={()=>alert('Welfare review created in demo mode. Follow-up has been scheduled.')} />:page==='dashboard'?<Dashboard setSelected={setSelected} onViewAll={()=>setPage('reviews')}/>:page==='reviews'?<PriorityReviews setSelected={setSelected}/>:page==='personnel'?<PersonnelList setSelected={setSelected}/>:page==='interventions'?<Interventions/>:page==='privacy'?<Privacy/>:<Audit/>;return <div className="app"><Header role={role} onLogout={()=>setLogged(false)} onMenu={()=>setSidebar(!sidebar)}/><Sidebar role={role} page={page} setPage={(p)=>{setSelected(null);setPage(p);setSidebar(false)}} open={sidebar}/><main>{content}</main><div className="roleSwitcher"><span>Demo role</span><select value={role} onChange={e=>{const r=e.target.value;setRole(r);setSelected(null);setPage(landing(r))}}>{Object.entries(roles).map(([k,v])=><option value={k} key={k}>{v}</option>)}</select></div></div>}
-function PersonnelList({setSelected}){return <><div className="pageHead"><div><span className="eyebrow">PERSONNEL ANALYTICS</span><h1>Personnel</h1><p>Pseudonymous welfare risk records available to authorized welfare officers.</p></div></div><Card><div className="tableWrap"><table><thead><tr><th>PERSONNEL</th><th>UNIT</th><th>RISK</th><th>PERSISTENCE</th><th>TREND</th></tr></thead><tbody>{people.map(p=><tr key={p.id} onClick={()=>setSelected(p)}><td><b>{p.id}</b><span className="sub">{p.name}</span></td><td>{p.unit}</td><td><RiskBadge level={p.level}/> {p.risk}</td><td>{p.days||'—'}</td><td>{p.trend}</td></tr>)}</tbody></table></div></Card></>}
-function AdminHistory({setSelected}){return <><div className="pageHead"><div><span className="eyebrow">ADMINISTRATION · AUTHORIZED RECORDS</span><h1>Personnel history</h1><p>Review attendance, leave patterns and risk signals for workforce planning.</p></div><ShieldCheck/></div><div className="stats"><Stat label="Average attendance" value="95%" sub="Last 90 days" icon={CalendarCheck} tone="info"/><Stat label="Leave remaining" value="76 days" sub="Across displayed records" icon={CalendarDays}/><Stat label="High-risk patterns" value="2" sub="Authorized human review" icon={AlertTriangle} tone="warn"/></div><Card><div className="cardHead"><div><h2>Attendance, leave & risk history</h2><p>Select a record for its attendance calendar, leave timeline and risk-pattern detail.</p></div><span className="miniTag">90-day view</span></div><div className="tableWrap"><table><thead><tr><th>PERSONNEL</th><th>UNIT</th><th>ATTENDANCE</th><th>LEAVE PATTERN</th><th>RISK PATTERN</th><th>LEAVE LEFT</th></tr></thead><tbody>{people.map(p=><tr key={p.id} onClick={()=>setSelected(p)}><td><div className="person"><div className="avatar">{p.id.slice(-2)}</div><div><b>{p.id}</b><span>{p.name}</span></div></div></td><td>{p.unit}</td><td><strong className={p.attendance<92?'attention':''}>{p.attendance}%</strong></td><td>{p.leavePattern}</td><td><div className="historyRisk"><RiskBadge level={p.level}/><span>{p.risk}/100 · {p.days?`${p.days}d persistent`:'No persistence'}</span></div></td><td><span className="leavePill">{p.leaveLeft} days</span></td></tr>)}</tbody></table></div></Card></>}
-function AdminAttendance({setSelected}){const onTarget=people.filter(p=>p.attendance>=95).length;return <><div className="pageHead"><div><span className="eyebrow">ADMINISTRATION · ATTENDANCE</span><h1>Attendance overview</h1><p>Monthly attendance status and approved leave context for each personnel record.</p></div><CalendarCheck/></div><div className="stats"><Stat label="Average attendance" value="95%" sub="Last 90 days" icon={CalendarCheck} tone="info"/><Stat label="On target" value={`${onTarget}/${people.length}`} sub="At or above 95%" icon={CheckCircle2}/><Stat label="Needs review" value="1" sub="Below 92% attendance" icon={AlertTriangle} tone="warn"/></div><Card><div className="cardHead"><div><h2>August attendance register</h2><p>Select a person to open their marked attendance calendar and leave record.</p></div><span className="miniTag">Current month</span></div><div className="attendanceRows">{people.map(p=><button className="attendanceRow" key={p.id} onClick={()=>setSelected(p)}><div className="avatar">{p.id.slice(-2)}</div><div className="attendancePerson"><b>{p.id} · {p.name}</b><span>{p.unit} Unit · {p.leavePattern}</span></div><div className="attendanceRate"><strong className={p.attendance<92?'attention':''}>{p.attendance}%</strong><span>attendance</span><i><em style={{width:p.attendance+'%'}}/></i></div><span className="leavePill">{p.leaveLeft} days left</span><ChevronRight size={18}/></button>)}</div></Card></>}
-function AdminPersonnel({setSelected}){return <><div className="pageHead"><div><span className="eyebrow">ADMINISTRATION · PERSONNEL DIRECTORY</span><h1>Personnel information</h1><p>Open a personnel record to review approved administrative, attendance and leave information.</p></div><Users/></div><div className="profileGrid">{people.map(p=><button className="profileTile" key={p.id} onClick={()=>setSelected(p)}><div className="profileAvatar">{p.id.slice(-2)}</div><div><span>{p.id}</span><h3>{p.name}</h3><p>{p.role} · {p.unit} Unit</p></div><ChevronRight size={19}/></button>)}</div></>}
-function AttendanceCalendar({person}){const leaveDays=person.id==='P-1042'?[5,6,18,19,20,27]:person.id==='P-1192'?[11,12,13,25]:person.id==='P-0873'?[7,8,9]:person.id==='P-2011'?[]:[15,16,17];const absentDays=person.attendance<92?[23]:[];const days=Array.from({length:30},(_,i)=>i+1);return <div className="attendanceCalendar"><div className="calendarTop"><div><h3>August 2026 attendance</h3><p>Marked monthly view · authorized administrative record</p></div><CalendarDays size={21}/></div><div className="calendarLegend"><span><i className="present"/> Present</span><span><i className="leave"/> Approved leave</span><span><i className="absent"/> Unplanned absence</span><span><i className="weekend"/> Weekend</span></div><div className="calendarWeek">{['M','T','W','T','F','S','S'].map((d,i)=><span key={i}>{d}</span>)}</div><div className="calendarDays">{Array.from({length:5},(_,i)=><i key={'blank'+i}/>)}{days.map(day=>{const weekend=(day+4)%7>4;const type=leaveDays.includes(day)?'leave':absentDays.includes(day)?'absent':weekend?'weekend':'present';return <button key={day} className={'day '+type} title={`${day} August · ${type==='leave'?'Approved leave':type==='absent'?'Unplanned absence':type==='weekend'?'Weekend':'Present'}`}>{day}{type==='present'?<Check size={10}/>:type==='leave'?<Minus size={11}/>:null}</button>})}</div></div>}
-function MyAttendance(){const me=people[0];return <><div className="pageHead"><div><span className="eyebrow">MY ATTENDANCE · PRIVATE VIEW</span><h1>My attendance</h1><p>See your recorded attendance and approved leave days in one clear monthly view.</p></div><CalendarCheck/></div><div className="leaveSummary"><Card className="leaveMetric"><CalendarCheck/><div><span>Attendance rate</span><strong>{me.attendance}%</strong><small>Last 90 days</small></div></Card><Card className="leaveMetric"><CalendarDays/><div><span>Leave remaining</span><strong>{me.leaveLeft} days</strong><small>Annual entitlement · 24 days</small></div></Card><Card className="leaveMetric"><History/><div><span>Leave used</span><strong>{24-me.leaveLeft} days</strong><small>{me.leavePattern}</small></div></Card></div><div className="myAttendanceGrid"><AttendanceCalendar person={me}/><Card className="attendanceSummary personalAttendanceSummary"><div className="cardHead"><div><h2>Attendance status</h2><p>Your 90-day record</p></div><CheckCircle2 size={19}/></div><strong className="attendanceBig">{me.attendance}%</strong><span>on-time attendance</span><div className="attendanceBar"><i style={{width:me.attendance+'%'}}/></div><div className="patternNote"><CalendarDays size={18}/><div><b>{me.leavePattern}</b><p>Approved leave is shown in amber on your calendar.</p></div></div><div className="summaryRows"><div><span>Recorded present days</span><b>{Math.round(me.attendance*.9)}</b></div><div><span>Available leave</span><b>{me.leaveLeft} days</b></div></div></Card></div></>}
-function AdminPersonInfo({person,onBack}){const leaveUsed=24-person.leaveLeft;return <><button className="back adminBack" onClick={onBack}>← Back to personnel</button><div className="personHero"><div className="profileAvatar largeAvatar">{person.id.slice(-2)}</div><div><span className="eyebrow">AUTHORIZED PERSONNEL RECORD · {person.id}</span><h1>{person.name}</h1><p>{person.role} · {person.unit} Unit · Pseudonymous demo record</p></div><span className="recordStatus"><CheckCircle2 size={15}/> Active record</span></div><div className="adminInfoGrid"><Card><div className="cardHead"><div><h2>Personal information</h2><p>Administrative contact and assignment data</p></div><UserRound size={19}/></div><div className="infoRows"><div><BriefcaseBusiness/><span>Assignment</span><b>{person.role}</b></div><div><MapPin/><span>Posting</span><b>{person.unit} Unit · Sector 04</b></div><div><Mail/><span>Official email</span><b>{person.id.toLowerCase()}@saarthi.demo</b></div><div><Phone/><span>Duty contact</span><b>+91 70000 1{person.id.slice(-3)}</b></div></div></Card><Card><div className="cardHead"><div><h2>Leave pattern</h2><p>Current leave balance and planning context</p></div><History size={19}/></div><div className="leaveInsight"><div><span>Annual entitlement</span><strong>24 <small>days</small></strong></div><div><span>Used this year</span><strong>{leaveUsed} <small>days</small></strong></div><div><span>Remaining</span><strong>{person.leaveLeft} <small>days</small></strong></div></div><div className="patternNote"><CalendarCheck size={18}/><div><b>{person.leavePattern}</b><p>Latest approved leave is reflected directly in the attendance calendar.</p></div></div></Card></div><div className="adminInfoGrid calendarGrid"><AttendanceCalendar person={person}/><Card className="attendanceSummary"><div className="cardHead"><div><h2>Attendance summary</h2><p>90-day administrative overview</p></div><CalendarCheck size={19}/></div><strong className="attendanceBig">{person.attendance}%</strong><span>attendance rate</span><div className="attendanceBar"><i style={{width:person.attendance+'%'}}/></div><div className="summaryRows"><div><span>Present days</span><b>{Math.round(person.attendance*.9)}</b></div><div><span>Approved leave</span><b>{leaveUsed}</b></div><div><span>Pattern</span><b>{person.trend}</b></div></div></Card></div></>}
-function Login({onLogin}){const [role,setRole]=useState('welfare');return <div className="login"><div className="loginShell"><div className="loginVisual"><span className="eyebrow">EARLY-WARNING INTELLIGENCE</span><h2>See the signal.<br/><span>Support the person.</span></h2><p>AI connects workload, duty, deployment and optional wellness patterns into an explainable welfare signal.</p><AIOrb/></div><div className="loginCard"><div className="logo large"><Shield size={30}/></div><span className="eyebrow">SECURE WELFARE PLATFORM</span><h1>SAARTHI <span>AI</span></h1><p>Predictive personnel welfare intelligence — designed for early support, privacy and human oversight.</p><div className="loginForm"><label>Demo role<select value={role} onChange={e=>setRole(e.target.value)}>{Object.entries(roles).map(([k,v])=><option value={k} key={k}>{v}</option>)}</select></label><label>Username<input value={role} readOnly/></label><label>Password<input value="demo123" readOnly type="password"/></label><button className="primary full" onClick={()=>onLogin(role)}>Enter secure workspace <ChevronRight size={17}/></button></div><small className="demoNote">Hackathon prototype · Synthetic data only · No real personnel data</small></div></div></div>}
+/* =========================================================
+   HELPERS
+========================================================= */
 
-createRoot(document.getElementById('root')).render(<App/>);
+function riskClass(level) {
+  return level === 'HIGH'
+    ? 'high'
+    : level === 'ELEVATED'
+      ? 'elevated'
+      : level === 'MODERATE'
+        ? 'moderate'
+        : 'low';
+}
+
+/* =========================================================
+   VISUAL COMPONENTS
+========================================================= */
+
+function AIOrb() {
+  return (
+    <div
+      className="aiScene"
+      aria-label="SAARTHI AI intelligence visualization"
+    >
+      <div className="orbHalo halo1" />
+      <div className="orbHalo halo2" />
+
+      <div className="aiOrb">
+        <div className="orbGrid" />
+
+        <div className="orbCore">
+          <BrainCircuit size={34} />
+          <span>AI</span>
+        </div>
+      </div>
+
+      <div className="orbit orbitA">
+        <i />
+        <i />
+        <i />
+      </div>
+
+      <div className="orbit orbitB">
+        <i />
+        <i />
+      </div>
+
+      <div className="dataNode nodeA">
+        <Activity size={13} />
+        DUTY
+      </div>
+
+      <div className="dataNode nodeB">
+        <Database size={13} />
+        HR
+      </div>
+
+      <div className="dataNode nodeC">
+        <HeartHandshake size={13} />
+        WELLNESS
+      </div>
+
+      <div className="dataNode nodeD">
+        <Shield size={13} />
+        WELFARE
+      </div>
+    </div>
+  );
+}
+
+function Header({ role, onLogout, onMenu }) {
+  return (
+    <header>
+      <div className="brand">
+        <button className="iconBtn mobile" onClick={onMenu}>
+          <Menu size={20} />
+        </button>
+
+        <div className="logo">
+          <Shield size={22} />
+        </div>
+
+        <div>
+          <strong>
+            SAARTHI <span>AI</span>
+          </strong>
+
+          <small>Personnel Welfare Intelligence</small>
+        </div>
+      </div>
+
+      <div className="headerRight">
+        <div className="secure">
+          <Lock size={14} />
+          Privacy-first
+        </div>
+
+        <div className="rolePill">{roles[role]}</div>
+
+        <InsightPopover />
+
+        <button className="iconBtn" onClick={onLogout}>
+          <LogOut size={17} />
+        </button>
+      </div>
+
+      <HoverAtmosphere />
+      <ModelShelf />
+    </header>
+  );
+}
+
+function Sidebar({ role, page, setPage, open }) {
+  let items;
+
+  if (role === 'personnel') {
+    items = [
+      ['home', 'My Wellness', HeartHandshake],
+      ['my-attendance', 'My Attendance', CalendarCheck],
+      ['checkin', 'Daily Check-in', ClipboardCheck],
+      ['privacy', 'Privacy & Consent', Lock],
+    ];
+  } else if (role === 'commander') {
+    items = [
+      ['overview', 'Command Overview', LayoutDashboard],
+      ['workload', 'Workload Analytics', Activity],
+      ['trends', 'Welfare Trends', TrendingUp],
+    ];
+  } else if (role === 'admin') {
+    items = [
+      ['admin-personnel', 'Personnel', Users],
+      ['admin-attendance', 'Attendance', CalendarCheck],
+      ['admin-history', 'Personnel History', History],
+      ['audit', 'Audit Log', FileCheck2],
+      ['privacy', 'Trust Center', Lock],
+    ];
+  } else {
+    items = [
+      ['dashboard', 'Welfare Dashboard', LayoutDashboard],
+      ['reviews', 'Priority Reviews', AlertTriangle],
+      ['personnel', 'Personnel', Users],
+      ['interventions', 'Interventions', HeartHandshake],
+      ['privacy', 'Trust Center', Lock],
+      ['audit', 'Audit Log', FileCheck2],
+    ];
+  }
+
+  return (
+    <aside className={open ? 'open' : ''}>
+      <div className="navTitle">WORKSPACE</div>
+
+      {items.map(([id, label, I]) => (
+        <button
+          key={id}
+          className={page === id ? 'nav active' : 'nav'}
+          onClick={() => setPage(id)}
+        >
+          <I size={18} />
+          {label}
+          <ChevronRight size={15} />
+        </button>
+      ))}
+
+      <div className="sideFoot">
+        <Database size={16} />
+
+        <div>
+          <b>Synthetic Demo Data</b>
+          <span>No real personnel data</span>
+        </div>
+      </div>
+    </aside>
+  );
+}
+
+function Card({ children, className = '' }) {
+  return <section className={`card ${className}`}>{children}</section>;
+}
+
+function HoverAtmosphere() {
+  useEffect(() => {
+    const move = (e) => {
+      document.documentElement.style.setProperty(
+        '--mouse-x',
+        `${e.clientX}px`
+      );
+
+      document.documentElement.style.setProperty(
+        '--mouse-y',
+        `${e.clientY}px`
+      );
+    };
+
+    window.addEventListener('pointermove', move, {
+      passive: true,
+    });
+
+    return () => {
+      window.removeEventListener('pointermove', move);
+    };
+  }, []);
+
+  return <div className="cursorGlow" aria-hidden="true" />;
+}
+
+function ModelShelf() {
+  return (
+    <div className="modelShelf" aria-hidden="true">
+      <div className="model modelCube">
+        <i />
+        <i />
+        <i />
+      </div>
+
+      <div className="model modelPyramid">
+        <i />
+        <i />
+        <i />
+        <i />
+      </div>
+
+      <div className="model modelRing">
+        <i />
+      </div>
+    </div>
+  );
+}
+
+function InsightPopover() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <div className="insightWrap">
+      <button
+        className="insightButton"
+        onClick={() => setOpen(!open)}
+        aria-expanded={open}
+      >
+        <Sparkles size={15} />
+        <span>Live insight</span>
+        <i />
+      </button>
+
+      {open && (
+        <div className="insightPopover">
+          <button
+            className="closeInsight"
+            onClick={() => setOpen(false)}
+            aria-label="Close live insight"
+          >
+            <X size={14} />
+          </button>
+
+          <span className="eyebrow">SAARTHI MOMENT</span>
+
+          <b>Small changes deserve attention.</b>
+
+          <p>
+            Review workload and recovery patterns together before making any
+            welfare decision.
+          </p>
+
+          <button className="textBtn" onClick={() => setOpen(false)}>
+            Got it
+            <ChevronRight size={15} />
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function Stat({ label, value, sub, icon: I, tone }) {
+  return (
+    <Card className="stat">
+      <div className={`statIcon ${tone || ''}`}>
+        <I size={19} />
+      </div>
+
+      <div>
+        <small>{label}</small>
+        <strong>{value}</strong>
+        <span>{sub}</span>
+      </div>
+    </Card>
+  );
+}
+
+function RiskBadge({ level }) {
+  return (
+    <span className={`riskBadge ${riskClass(level)}`}>
+      <i />
+      {level}
+    </span>
+  );
+}
+
+/* =========================================================
+   WELFARE OFFICER
+========================================================= */
+
+function PriorityReviews({ setSelected }) {
+  const [filter, setFilter] = useState('All');
+
+  const visible = people.filter(
+    (p) => filter === 'All' || p.level === filter
+  );
+
+  return (
+    <>
+      <div className="pageHead">
+        <div>
+          <span className="eyebrow">REVIEW QUEUE</span>
+          <h1>Priority welfare reviews</h1>
+          <p>Focused queue for authorized, human-led follow-up.</p>
+        </div>
+      </div>
+
+      <div className="reviewFilters">
+        {['All', 'HIGH', 'ELEVATED'].map((x) => (
+          <button
+            key={x}
+            className={filter === x ? 'selected' : ''}
+            onClick={() => setFilter(x)}
+          >
+            {x === 'All' ? 'All records' : x}
+          </button>
+        ))}
+      </div>
+
+      <Card>
+        <div className="cardHead">
+          <div>
+            <h2>Review queue</h2>
+            <p>
+              {visible.length} records matched · sorted by current risk
+            </p>
+          </div>
+
+          <span className="miniTag">Action required</span>
+        </div>
+
+        <div className="reviewQueue">
+          {[...visible]
+            .sort((a, b) => b.risk - a.risk)
+            .map((p) => (
+              <button
+                className="reviewItem"
+                key={p.id}
+                onClick={() => setSelected(p)}
+              >
+                <div className="avatar">{p.id.slice(-2)}</div>
+
+                <div>
+                  <b>
+                    {p.id} · {p.name}
+                  </b>
+
+                  <span>
+                    {p.unit} Unit · {p.days || 0} days persistent
+                  </span>
+                </div>
+
+                <RiskBadge level={p.level} />
+
+                <strong>{p.risk}</strong>
+
+                <ChevronRight size={17} />
+              </button>
+            ))}
+        </div>
+      </Card>
+    </>
+  );
+}
+
+function WorkloadAnalytics() {
+  const load = [
+    ['Night-duty coverage', 68, 'balanced'],
+    ['Deployment extension', 82, 'watch'],
+    ['Rest-day utilization', 47, 'healthy'],
+    ['Shift handovers', 74, 'watch'],
+  ];
+
+  return (
+    <>
+      <div className="pageHead">
+        <div>
+          <span className="eyebrow">WORKLOAD ANALYTICS</span>
+          <h1>Operational load signals</h1>
+          <p>
+            Find pressure points in work design before they become welfare
+            concerns.
+          </p>
+        </div>
+      </div>
+
+      <div className="workloadGrid">
+        {load.map(([label, value, status]) => (
+          <Card className="workloadMetric" key={label}>
+            <span>{label}</span>
+
+            <strong>
+              {value}
+              <small>/100</small>
+            </strong>
+
+            <div className="loadBar">
+              <i
+                className={status}
+                style={{ width: `${value}%` }}
+              />
+            </div>
+
+            <p>
+              {status === 'watch'
+                ? 'Review distribution this week'
+                : 'Within expected range'}
+            </p>
+          </Card>
+        ))}
+      </div>
+
+      <Card>
+        <div className="cardHead">
+          <div>
+            <h2>Planning note</h2>
+            <p>
+              Suggested organizational action based on this week’s aggregated
+              operational patterns.
+            </p>
+          </div>
+
+          <Activity />
+        </div>
+
+        <div className="notice">
+          <Clock3 />
+
+          <div>
+            <b>Rebalance extended deployments in Bravo Unit.</b>
+
+            <p>
+              Shift coverage and rest intervals show the highest combined
+              workload signal. Use roster planning, not individual labels, to
+              respond.
+            </p>
+          </div>
+        </div>
+      </Card>
+    </>
+  );
+}
+
+function DailyCheckin() {
+  const [done, setDone] = useState(false);
+  const [mood, setMood] = useState(null);
+
+  return (
+    <>
+      <div className="pageHead">
+        <div>
+          <span className="eyebrow">PRIVATE DAILY CHECK-IN</span>
+          <h1>Take a moment</h1>
+          <p>
+            Your optional check-in is separate from operational records.
+          </p>
+        </div>
+      </div>
+
+      <Card className="wellnessCard checkinPage">
+        <div className="checkTop">
+          <div>
+            <h2>How has today felt?</h2>
+            <p>
+              Choose the closest answer. You can skip this at any time.
+            </p>
+          </div>
+
+          <ClipboardCheck />
+        </div>
+
+        <div className="moods">
+          {['😄', '🙂', '😐', '😟', '😣'].map((m, i) => (
+            <button
+              key={m}
+              onClick={() => setMood(i)}
+              className={mood === i ? 'selected' : ''}
+            >
+              {m}
+
+              <small>
+                {['Good', 'Okay', 'Low', 'Difficult', 'Very difficult'][i]}
+              </small>
+            </button>
+          ))}
+        </div>
+
+        <div className="checkGrid">
+          <div>
+            <span>Energy</span>
+            <strong>Select how you feel</strong>
+          </div>
+
+          <div>
+            <span>Rest</span>
+            <strong>Private self-report</strong>
+          </div>
+
+          <div>
+            <span>Pressure</span>
+            <strong>Optional context</strong>
+          </div>
+        </div>
+
+        {done && (
+          <div className="success">
+            <CheckCircle2 />
+            Check-in saved locally for this demonstration.
+          </div>
+        )}
+
+        <button
+          className="primary full"
+          onClick={() => setDone(true)}
+          disabled={mood === null}
+        >
+          Save private check-in
+        </button>
+      </Card>
+    </>
+  );
+}
+
+function WellnessHome() {
+  const me = people[0];
+
+  return (
+    <>
+      <div className="mobileHero">
+        <span className="eyebrow">MY WELLNESS · PRIVATE</span>
+        <h1>Good evening</h1>
+        <p>
+          A calm view of your work rhythm and available support.
+        </p>
+      </div>
+
+      <div className="leaveSummary">
+        <Card className="leaveMetric">
+          <CalendarCheck />
+
+          <div>
+            <span>Attendance</span>
+            <strong>{me.attendance}%</strong>
+            <small>Last 90 days · on target</small>
+          </div>
+        </Card>
+
+        <Card className="leaveMetric">
+          <CalendarDays />
+
+          <div>
+            <span>Leave remaining</span>
+            <strong>{me.leaveLeft} days</strong>
+            <small>Annual entitlement · 24 days</small>
+          </div>
+        </Card>
+
+        <Card className="leaveMetric">
+          <History />
+
+          <div>
+            <span>Leave used</span>
+            <strong>{24 - me.leaveLeft} days</strong>
+            <small>{me.leavePattern}</small>
+          </div>
+        </Card>
+      </div>
+
+      <Card>
+        <div className="cardHead">
+          <div>
+            <h2>What the system is noticing</h2>
+            <p>
+              Feedback without exposing a manipulable “recovery score”
+            </p>
+          </div>
+
+          <Activity />
+        </div>
+
+        <div className="notice">
+          <TrendingUp />
+
+          <div>
+            <b>Recent workload is above your usual pattern.</b>
+
+            <p>
+              Your authorized duty data shows a sustained increase compared
+              with your personal baseline.
+            </p>
+          </div>
+        </div>
+
+        <div className="notice">
+          <HeartHandshake />
+
+          <div>
+            <b>Support is available.</b>
+
+            <p>
+              You can access confidential welfare resources without changing
+              your duty record.
+            </p>
+          </div>
+        </div>
+      </Card>
+    </>
+  );
+}
+
+/* =========================================================
+   DASHBOARD
+========================================================= */
+
+function Dashboard({ setSelected, onViewAll }) {
+  const counts = {
+    high: people.filter((p) => p.level === 'HIGH').length,
+    elev: people.filter((p) => p.level === 'ELEVATED').length,
+  };
+
+  const trend = [
+    { d: 'Mon', risk: 51 },
+    { d: 'Tue', risk: 59 },
+    { d: 'Wed', risk: 55 },
+    { d: 'Thu', risk: 67 },
+    { d: 'Fri', risk: 63 },
+    { d: 'Sat', risk: 76 },
+    { d: 'Sun', risk: 71 },
+  ];
+
+  return (
+    <>
+      <div className="heroCommand">
+        <div className="pageHead">
+          <div>
+            <span className="eyebrow">WELFARE COMMAND CENTER</span>
+
+            <h1>Good evening, Welfare Officer</h1>
+
+            <p>
+              Early-warning intelligence for personnel welfare — human review
+              remains the decision point.
+            </p>
+
+            <div className="heroSignals">
+              <span>
+                <i /> Personal baseline
+              </span>
+
+              <span>
+                <i /> Trend analysis
+              </span>
+
+              <span>
+                <i /> Human oversight
+              </span>
+            </div>
+          </div>
+
+          <div className="live">
+            <i /> DATA PIPELINE ACTIVE
+          </div>
+        </div>
+
+        <AIOrb />
+      </div>
+
+      <div className="stats">
+        <Stat
+          label="Personnel monitored"
+          value="2,480"
+          sub="Synthetic demo population"
+          icon={Users}
+        />
+
+        <Stat
+          label="High risk"
+          value={counts.high + 9}
+          sub="Priority welfare review"
+          icon={AlertTriangle}
+          tone="danger"
+        />
+
+        <Stat
+          label="Elevated"
+          value={counts.elev + 31}
+          sub="Continue observation"
+          icon={TrendingUp}
+          tone="warn"
+        />
+
+        <Stat
+          label="Reviews pending"
+          value="7"
+          sub="Human action required"
+          icon={Clock3}
+          tone="info"
+        />
+      </div>
+
+      <div className="grid2 dashboardAnalytics">
+        <Card>
+          <div className="cardHead">
+            <div>
+              <h2>Welfare risk trajectory</h2>
+              <p>Unit-wide aggregate signal · last 7 days</p>
+            </div>
+
+            <span className="miniTag">Dynamic pattern</span>
+          </div>
+
+          <div className="chart">
+            <ResponsiveContainer width="100%" height={245}>
+              <LineChart data={trend}>
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  vertical={false}
+                />
+
+                <XAxis dataKey="d" />
+
+                <YAxis domain={[0, 100]} />
+
+                <Tooltip />
+
+                <Line
+                  type="monotone"
+                  dataKey="risk"
+                  strokeWidth={4}
+                  dot={{ r: 4 }}
+                  activeDot={{ r: 8 }}
+                  animationDuration={1900}
+                  animationEasing="ease-in-out"
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+        </Card>
+
+        <Card>
+          <div className="cardHead">
+            <div>
+              <h2>Risk distribution</h2>
+              <p>Current synthetic population</p>
+            </div>
+          </div>
+
+          <div className="donut">
+            <div className="donutCore">
+              <strong>2,480</strong>
+              <span>monitored</span>
+            </div>
+          </div>
+
+          <div className="legend">
+            <span>
+              <i className="dot lowdot" />
+              Low <b>2,116</b>
+            </span>
+
+            <span>
+              <i className="dot moddot" />
+              Moderate <b>187</b>
+            </span>
+
+            <span>
+              <i className="dot evdot" />
+              Elevated <b>148</b>
+            </span>
+
+            <span>
+              <i className="dot hidot" />
+              High <b>29</b>
+            </span>
+          </div>
+        </Card>
+      </div>
+
+      <Card className="reviewsCard">
+        <div className="cardHead">
+          <div>
+            <h2>Priority welfare reviews</h2>
+            <p>
+              Persistent elevated risk requires authorized human review
+            </p>
+          </div>
+
+          <button className="textBtn viewAllBtn" onClick={onViewAll}>
+            View all
+            <ChevronRight size={16} />
+          </button>
+        </div>
+
+        <div className="tableWrap">
+          <table>
+            <thead>
+              <tr>
+                <th>PERSONNEL</th>
+                <th>RISK</th>
+                <th>PERSISTENCE</th>
+                <th>TREND</th>
+                <th>PRIMARY SIGNAL</th>
+                <th />
+              </tr>
+            </thead>
+
+            <tbody>
+              {people
+                .filter((p) => p.review)
+                .map((p) => (
+                  <tr
+                    key={p.id}
+                    onClick={() => setSelected(p)}
+                  >
+                    <td>
+                      <div className="person">
+                        <div className="avatar">
+                          {p.id.slice(-2)}
+                        </div>
+
+                        <div>
+                          <b>{p.id}</b>
+                          <span>
+                            {p.name} · {p.unit}
+                          </span>
+                        </div>
+                      </div>
+                    </td>
+
+                    <td>
+                      <RiskBadge level={p.level} />
+                      <strong className="riskNum">{p.risk}</strong>
+                    </td>
+
+                    <td>{p.days} days</td>
+
+                    <td>
+                      <span className="trendUp">
+                        ↗ {p.trend}
+                      </span>
+                    </td>
+
+                    <td>
+                      {p.workload > 25
+                        ? 'Sustained workload + reduced rest'
+                        : 'Operational load pattern'}
+                    </td>
+
+                    <td>
+                      <ChevronRight size={18} />
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
+      </Card>
+    </>
+  );
+}
+
+/* =========================================================
+   PERSON DETAIL
+========================================================= */
+
+function PersonDetail({
+  person,
+  onBack,
+  onIntervene,
+}) {
+  if (!person) return null;
+
+  const factors = [
+    ['Workload deviation', person.workload],
+    ['Reduced rest', person.rest],
+    ['Night duty', person.night],
+    ['Deployment extension', person.deployment],
+    ['Leave pattern', person.leave],
+  ];
+
+  return (
+    <>
+      <div className="back" onClick={onBack}>
+        ← Back to reviews
+      </div>
+
+      <div className="pageHead compact">
+        <div>
+          <span className="eyebrow">
+            CONFIDENTIAL WELFARE REVIEW · {person.id}
+          </span>
+
+          <h1>{person.name}</h1>
+
+          <p>
+            {person.role} · Unit {person.unit} · Pseudonymous demo record
+          </p>
+        </div>
+
+        <RiskBadge level={person.level} />
+      </div>
+
+      <div className="detailGrid">
+        <Card>
+          <div className="cardHead">
+            <div>
+              <h2>Risk trajectory</h2>
+              <p>
+                Persistent elevated signal: {person.days} days
+              </p>
+            </div>
+
+            <div className="bigRisk">
+              {person.risk}
+              <small>/100</small>
+            </div>
+          </div>
+
+          <div className="chart">
+            <ResponsiveContainer width="100%" height={250}>
+              <LineChart data={person.history}>
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  vertical={false}
+                />
+
+                <XAxis dataKey="d" />
+
+                <YAxis domain={[0, 100]} />
+
+                <Tooltip />
+
+                <Line
+                  type="monotone"
+                  dataKey="r"
+                  strokeWidth={3}
+                  dot={{ r: 4 }}
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </div>
+
+          <div className="callout">
+            <AlertTriangle size={18} />
+
+            <div>
+              <b>Human-led review recommended</b>
+
+              <p>
+                The prototype persistence policy is risk ≥80 for 5
+                consecutive days. This is an alert for welfare review, not a
+                diagnosis or disciplinary action.
+              </p>
+            </div>
+          </div>
+        </Card>
+
+        <Card>
+          <div className="cardHead">
+            <div>
+              <h2>Why did risk increase?</h2>
+              <p>Explainable contributing indicators</p>
+            </div>
+
+            <Eye size={18} />
+          </div>
+
+          {factors.map(([name, val]) => (
+            <div className="factor" key={name}>
+              <div>
+                <span>{name}</span>
+
+                <b>
+                  {val > 0 ? '+' : ''}
+                  {val}%
+                </b>
+              </div>
+
+              <div className="bar">
+                <i
+                  style={{
+                    width: `${Math.min(
+                      100,
+                      Math.abs(val) * 2.4
+                    )}%`,
+                  }}
+                />
+              </div>
+            </div>
+          ))}
+
+          <div className="explain">
+            <BrainCircuit size={18} />
+
+            <p>
+              “Risk elevation is primarily associated with sustained workload,
+              reduced rest intervals and extended operational deployment
+              relative to this person's baseline.”
+            </p>
+          </div>
+        </Card>
+      </div>
+
+      <div className="detailGrid">
+        <Card>
+          <div className="cardHead">
+            <div>
+              <h2>Recommended welfare actions</h2>
+              <p>
+                Recommendations for authorized human review
+              </p>
+            </div>
+          </div>
+
+          <label className="check">
+            <input type="checkbox" defaultChecked />
+            Review workload and duty distribution
+          </label>
+
+          <label className="check">
+            <input type="checkbox" defaultChecked />
+            Assess rest/recovery opportunity
+          </label>
+
+          <label className="check">
+            <input type="checkbox" />
+            Review leave availability
+          </label>
+
+          <label className="check">
+            <input type="checkbox" defaultChecked />
+            Offer confidential welfare support
+          </label>
+
+          <button
+            className="primary full"
+            onClick={onIntervene}
+          >
+            Create welfare review
+          </button>
+        </Card>
+
+        <Card>
+          <div className="cardHead">
+            <div>
+              <h2>Data boundary</h2>
+              <p>
+                What this screen intentionally does not expose
+              </p>
+            </div>
+
+            <Lock size={18} />
+          </div>
+
+          <ul className="clean">
+            <li>
+              <CheckCircle2 />
+              No diagnosis or mental-health label
+            </li>
+
+            <li>
+              <CheckCircle2 />
+              No disciplinary recommendation
+            </li>
+
+            <li>
+              <CheckCircle2 />
+              No location tracking
+            </li>
+
+            <li>
+              <CheckCircle2 />
+              No private messages or CCTV
+            </li>
+
+            <li>
+              <CheckCircle2 />
+              Personnel identity is pseudonymized in analytics
+            </li>
+          </ul>
+        </Card>
+      </div>
+    </>
+  );
+}
+
+/* =========================================================
+   PERSONNEL VIEW
+========================================================= */
+
+function PersonnelView({ page }) {
+  const [done, setDone] = useState(false);
+  const me = people[0];
+
+  if (page === 'privacy') {
+    return <Privacy />;
+  }
+
+  return (
+    <>
+      <div className="mobileHero">
+        <span className="eyebrow">MY WELLNESS · PRIVATE</span>
+        <h1>Good evening</h1>
+        <p>
+          Your welfare space is designed to minimize manual reporting.
+        </p>
+      </div>
+
+      <div className="leaveSummary">
+        <Card className="leaveMetric">
+          <CalendarCheck />
+
+          <div>
+            <span>Attendance</span>
+            <strong>{me.attendance}%</strong>
+            <small>Last 90 days · on target</small>
+          </div>
+        </Card>
+
+        <Card className="leaveMetric">
+          <CalendarDays />
+
+          <div>
+            <span>Leave remaining</span>
+            <strong>{me.leaveLeft} days</strong>
+            <small>Annual entitlement · 24 days</small>
+          </div>
+        </Card>
+
+        <Card className="leaveMetric">
+          <History />
+
+          <div>
+            <span>Leave used</span>
+            <strong>{24 - me.leaveLeft} days</strong>
+            <small>{me.leavePattern}</small>
+          </div>
+        </Card>
+      </div>
+
+      <Card className="wellnessCard">
+        <div className="checkTop">
+          <div>
+            <h2>Daily check-in</h2>
+            <p>Optional · takes less than 30 seconds</p>
+          </div>
+
+          <ClipboardCheck />
+        </div>
+
+        <h3>How are you feeling today?</h3>
+
+        <div className="moods">
+          {['😄', '🙂', '😐', '😟', '😣'].map((m, i) => (
+            <button
+              key={m}
+              onClick={() => setDone(true)}
+              className={done && i === 2 ? 'selected' : ''}
+            >
+              {m}
+
+              <small>
+                {['Good', 'Okay', 'Low', 'Difficult', 'Very difficult'][i]}
+              </small>
+            </button>
+          ))}
+        </div>
+
+        <div className="checkGrid">
+          <div>
+            <span>Energy</span>
+            <strong>Moderate</strong>
+          </div>
+
+          <div>
+            <span>Rest</span>
+            <strong>Below usual</strong>
+          </div>
+
+          <div>
+            <span>Pressure</span>
+            <strong>Moderate</strong>
+          </div>
+        </div>
+
+        {done && (
+          <div className="success">
+            <CheckCircle2 />
+            Check-in saved locally for this demo. No single response changes a
+            welfare decision.
+          </div>
+        )}
+
+        <button
+          className="primary full"
+          onClick={() => setDone(true)}
+        >
+          Save optional check-in
+        </button>
+      </Card>
+
+      <Card>
+        <div className="cardHead">
+          <div>
+            <h2>What the system is noticing</h2>
+            <p>
+              Feedback without exposing a manipulable “recovery score”
+            </p>
+          </div>
+
+          <Activity />
+        </div>
+
+        <div className="notice">
+          <TrendingUp />
+
+          <div>
+            <b>Recent workload is above your usual pattern.</b>
+
+            <p>
+              Your authorized duty data shows a sustained increase compared
+              with your personal baseline.
+            </p>
+          </div>
+        </div>
+
+        <div className="notice">
+          <HeartHandshake />
+
+          <div>
+            <b>Support is available.</b>
+
+            <p>
+              You can access confidential welfare resources without changing
+              your duty record.
+            </p>
+          </div>
+        </div>
+      </Card>
+    </>
+  );
+}
+
+/* =========================================================
+   PRIVACY
+========================================================= */
+
+function Privacy() {
+  return (
+    <>
+      <div className="pageHead">
+        <div>
+          <span className="eyebrow">TRUST CENTER</span>
+
+          <h1>Privacy & consent</h1>
+
+          <p>
+            Control optional wellness data and understand who can access what.
+          </p>
+        </div>
+
+        <Lock />
+      </div>
+
+      <Card>
+        <div className="privacyRow">
+          <div>
+            <b>Core HR/duty data</b>
+
+            <span>
+              Used only for authorized welfare analytics in this prototype.
+            </span>
+          </div>
+
+          <span className="enabled">Protected</span>
+        </div>
+
+        <div className="privacyRow">
+          <div>
+            <b>Daily wellness check-ins</b>
+
+            <span>
+              Optional self-reporting; you can withdraw future sharing.
+            </span>
+          </div>
+
+          <label className="switch">
+            <input type="checkbox" defaultChecked />
+            <i />
+          </label>
+        </div>
+
+        <div className="privacyRow">
+          <div>
+            <b>Wearable / biometric signals</b>
+
+            <span>
+              Optional and disabled by default in the prototype.
+            </span>
+          </div>
+
+          <label className="switch">
+            <input type="checkbox" />
+            <i />
+          </label>
+        </div>
+
+        <div className="privacyRow">
+          <div>
+            <b>Access logging</b>
+
+            <span>
+              Authorized access events are recorded for accountability.
+            </span>
+          </div>
+
+          <span className="enabled">Always on</span>
+        </div>
+      </Card>
+    </>
+  );
+}
+
+/* =========================================================
+   COMMANDER
+========================================================= */
+
+function Commander({ page }) {
+  const chart = [
+    { u: 'Alpha', v: 72 },
+    { u: 'Bravo', v: 81 },
+    { u: 'Charlie', v: 54 },
+    { u: 'Delta', v: 42 },
+    { u: 'Echo', v: 47 },
+  ];
+
+  if (page === 'trends') {
+    return (
+      <>
+        <div className="pageHead">
+          <div>
+            <span className="eyebrow">WELFARE TRENDS</span>
+
+            <h1>Organization-level signals</h1>
+
+            <p>
+              Aggregated analytics help leadership identify systemic workload
+              pressure.
+            </p>
+          </div>
+        </div>
+
+        <Card>
+          <h2>Unit welfare load</h2>
+
+          <p>Relative index for synthetic demonstration only.</p>
+
+          <div className="chart tall">
+            <ResponsiveContainer width="100%" height={330}>
+              <BarChart data={chart}>
+                <CartesianGrid
+                  strokeDasharray="3 3"
+                  vertical={false}
+                />
+
+                <XAxis dataKey="u" />
+
+                <YAxis domain={[0, 100]} />
+
+                <Tooltip />
+
+                <Bar dataKey="v" />
+              </BarChart>
+            </ResponsiveContainer>
+          </div>
+        </Card>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <div className="pageHead">
+        <div>
+          <span className="eyebrow">COMMAND OVERVIEW</span>
+
+          <h1>Operational welfare picture</h1>
+
+          <p>
+            Aggregate view — no individual psychological labels.
+          </p>
+        </div>
+      </div>
+
+      <div className="stats">
+        <Stat
+          label="Personnel"
+          value="1,990"
+          sub="Across 5 units"
+          icon={Users}
+        />
+
+        <Stat
+          label="High / priority"
+          value="29"
+          sub="Welfare workflow"
+          icon={AlertTriangle}
+          tone="danger"
+        />
+
+        <Stat
+          label="Avg duty load"
+          value="8.7h"
+          sub="7-day synthetic avg"
+          icon={Activity}
+        />
+
+        <Stat
+          label="Rest pressure"
+          value="14%"
+          sub="Above baseline"
+          icon={TrendingUp}
+          tone="warn"
+        />
+      </div>
+
+      <Card>
+        <div className="cardHead">
+          <div>
+            <h2>Unit workload pressure</h2>
+
+            <p>
+              Use this to identify organizational causes, not to label
+              individuals.
+            </p>
+          </div>
+        </div>
+
+        <div className="unitList">
+          {units.map(([u, n, r, w]) => (
+            <div className="unit" key={u}>
+              <div>
+                <b>{u} Unit</b>
+
+                <span>
+                  {n} personnel · {r} priority reviews
+                </span>
+              </div>
+
+              <div className="unitBar">
+                <i style={{ width: `${w * 3}%` }} />
+              </div>
+
+              <strong>{w}%</strong>
+            </div>
+          ))}
+        </div>
+      </Card>
+    </>
+  );
+}
+
+/* =========================================================
+   INTERVENTIONS
+========================================================= */
+
+function Interventions() {
+  const rows = [
+    ['P-1042', 'Workload review', 'In progress', 'Today'],
+    ['P-1192', 'Rest/recovery assessment', 'Scheduled', 'Tomorrow'],
+    ['P-0873', 'Welfare support offered', 'Completed', '26 Aug'],
+  ];
+
+  return (
+    <>
+      <div className="pageHead">
+        <div>
+          <span className="eyebrow">INTERVENTION TRACKING</span>
+
+          <h1>Welfare actions</h1>
+
+          <p>
+            Close the loop: detection → review → support → follow-up.
+          </p>
+        </div>
+      </div>
+
+      <Card>
+        <div className="tableWrap">
+          <table>
+            <thead>
+              <tr>
+                <th>PERSONNEL</th>
+                <th>ACTION</th>
+                <th>STATUS</th>
+                <th>FOLLOW-UP</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {rows.map((r) => (
+                <tr key={r[0]}>
+                  <td>
+                    <b>{r[0]}</b>
+                  </td>
+
+                  <td>{r[1]}</td>
+
+                  <td>
+                    <span className="status">{r[2]}</span>
+                  </td>
+
+                  <td>{r[3]}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Card>
+
+      <div className="flow">
+        <span>Detection</span>
+        <ChevronRight />
+
+        <span>Human review</span>
+        <ChevronRight />
+
+        <span>Intervention</span>
+        <ChevronRight />
+
+        <span>Follow-up</span>
+      </div>
+    </>
+  );
+}
+
+/* =========================================================
+   AUDIT
+========================================================= */
+
+function Audit() {
+  const rows = [
+    ['22:14', 'Welfare Officer', 'Viewed P-1042 risk explanation'],
+    ['21:58', 'Welfare Officer', 'Created welfare review for P-1192'],
+    ['21:32', 'Commander', 'Viewed Alpha aggregate workload'],
+    ['20:46', 'Administrator', 'Updated role permissions'],
+  ];
+
+  return (
+    <>
+      <div className="pageHead">
+        <div>
+          <span className="eyebrow">ACCOUNTABILITY</span>
+
+          <h1>Audit log</h1>
+
+          <p>Demonstration access events.</p>
+        </div>
+      </div>
+
+      <Card>
+        <div className="audit">
+          {rows.map((x) => (
+            <div className="auditRow" key={x[0]}>
+              <Clock3 />
+
+              <b>{x[0]}</b>
+
+              <span>{x[1]}</span>
+
+              <p>{x[2]}</p>
+            </div>
+          ))}
+        </div>
+      </Card>
+    </>
+  );
+}
+
+/* =========================================================
+   PERSONNEL LIST
+========================================================= */
+
+function PersonnelList({ setSelected }) {
+  return (
+    <>
+      <div className="pageHead">
+        <div>
+          <span className="eyebrow">PERSONNEL ANALYTICS</span>
+
+          <h1>Personnel</h1>
+
+          <p>
+            Pseudonymous welfare risk records available to authorized welfare
+            officers.
+          </p>
+        </div>
+      </div>
+
+      <Card>
+        <div className="tableWrap">
+          <table>
+            <thead>
+              <tr>
+                <th>PERSONNEL</th>
+                <th>UNIT</th>
+                <th>RISK</th>
+                <th>PERSISTENCE</th>
+                <th>TREND</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {people.map((p) => (
+                <tr
+                  key={p.id}
+                  onClick={() => setSelected(p)}
+                >
+                  <td>
+                    <b>{p.id}</b>
+                    <span className="sub">{p.name}</span>
+                  </td>
+
+                  <td>{p.unit}</td>
+
+                  <td>
+                    <RiskBadge level={p.level} /> {p.risk}
+                  </td>
+
+                  <td>{p.days || '—'}</td>
+
+                  <td>{p.trend}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Card>
+    </>
+  );
+}
+
+/* =========================================================
+   ADMIN HISTORY
+========================================================= */
+
+function AdminHistory({ setSelected }) {
+  return (
+    <>
+      <div className="pageHead">
+        <div>
+          <span className="eyebrow">
+            ADMINISTRATION · AUTHORIZED RECORDS
+          </span>
+
+          <h1>Personnel history</h1>
+
+          <p>
+            Review attendance, leave patterns and risk signals for workforce
+            planning.
+          </p>
+        </div>
+
+        <ShieldCheck />
+      </div>
+
+      <div className="stats">
+        <Stat
+          label="Average attendance"
+          value="95%"
+          sub="Last 90 days"
+          icon={CalendarCheck}
+          tone="info"
+        />
+
+        <Stat
+          label="Leave remaining"
+          value="76 days"
+          sub="Across displayed records"
+          icon={CalendarDays}
+        />
+
+        <Stat
+          label="High-risk patterns"
+          value="2"
+          sub="Authorized human review"
+          icon={AlertTriangle}
+          tone="warn"
+        />
+      </div>
+
+      <Card>
+        <div className="cardHead">
+          <div>
+            <h2>Attendance, leave & risk history</h2>
+
+            <p>
+              Select a record for its attendance calendar, leave timeline and
+              risk-pattern detail.
+            </p>
+          </div>
+
+          <span className="miniTag">90-day view</span>
+        </div>
+
+        <div className="tableWrap">
+          <table>
+            <thead>
+              <tr>
+                <th>PERSONNEL</th>
+                <th>UNIT</th>
+                <th>ATTENDANCE</th>
+                <th>LEAVE PATTERN</th>
+                <th>RISK PATTERN</th>
+                <th>LEAVE LEFT</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              {people.map((p) => (
+                <tr
+                  key={p.id}
+                  onClick={() => setSelected(p)}
+                >
+                  <td>
+                    <div className="person">
+                      <div className="avatar">
+                        {p.id.slice(-2)}
+                      </div>
+
+                      <div>
+                        <b>{p.id}</b>
+                        <span>{p.name}</span>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>{p.unit}</td>
+
+                  <td>
+                    <strong
+                      className={
+                        p.attendance < 92 ? 'attention' : ''
+                      }
+                    >
+                      {p.attendance}%
+                    </strong>
+                  </td>
+
+                  <td>{p.leavePattern}</td>
+
+                  <td>
+                    <div className="historyRisk">
+                      <RiskBadge level={p.level} />
+
+                      <span>
+                        {p.risk}/100 ·{' '}
+                        {p.days
+                          ? `${p.days}d persistent`
+                          : 'No persistence'}
+                      </span>
+                    </div>
+                  </td>
+
+                  <td>
+                    <span className="leavePill">
+                      {p.leaveLeft} days
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </Card>
+    </>
+  );
+}
+
+/* =========================================================
+   ATTENDANCE
+========================================================= */
+
+function AdminAttendance({ setSelected }) {
+  const onTarget = people.filter(
+    (p) => p.attendance >= 95
+  ).length;
+
+  return (
+    <>
+      <div className="pageHead">
+        <div>
+          <span className="eyebrow">
+            ADMINISTRATION · ATTENDANCE
+          </span>
+
+          <h1>Attendance overview</h1>
+
+          <p>
+            Monthly attendance status and approved leave context for each
+            personnel record.
+          </p>
+        </div>
+
+        <CalendarCheck />
+      </div>
+
+      <div className="stats">
+        <Stat
+          label="Average attendance"
+          value="95%"
+          sub="Last 90 days"
+          icon={CalendarCheck}
+          tone="info"
+        />
+
+        <Stat
+          label="On target"
+          value={`${onTarget}/${people.length}`}
+          sub="At or above 95%"
+          icon={CheckCircle2}
+        />
+
+        <Stat
+          label="Needs review"
+          value="1"
+          sub="Below 92% attendance"
+          icon={AlertTriangle}
+          tone="warn"
+        />
+      </div>
+
+      <Card>
+        <div className="cardHead">
+          <div>
+            <h2>August attendance register</h2>
+
+            <p>
+              Select a person to open their marked attendance calendar and
+              leave record.
+            </p>
+          </div>
+
+          <span className="miniTag">Current month</span>
+        </div>
+
+        <div className="attendanceRows">
+          {people.map((p) => (
+            <button
+              className="attendanceRow"
+              key={p.id}
+              onClick={() => setSelected(p)}
+            >
+              <div className="avatar">{p.id.slice(-2)}</div>
+
+              <div className="attendancePerson">
+                <b>
+                  {p.id} · {p.name}
+                </b>
+
+                <span>
+                  {p.unit} Unit · {p.leavePattern}
+                </span>
+              </div>
+
+              <div className="attendanceRate">
+                <strong
+                  className={
+                    p.attendance < 92 ? 'attention' : ''
+                  }
+                >
+                  {p.attendance}%
+                </strong>
+
+                <span>attendance</span>
+
+                <i>
+                  <em
+                    style={{
+                      width: `${p.attendance}%`,
+                    }}
+                  />
+                </i>
+              </div>
+
+              <span className="leavePill">
+                {p.leaveLeft} days left
+              </span>
+
+              <ChevronRight size={18} />
+            </button>
+          ))}
+        </div>
+      </Card>
+    </>
+  );
+}
+
+function AdminPersonnel({ setSelected }) {
+  return (
+    <>
+      <div className="pageHead">
+        <div>
+          <span className="eyebrow">
+            ADMINISTRATION · PERSONNEL DIRECTORY
+          </span>
+
+          <h1>Personnel information</h1>
+
+          <p>
+            Open a personnel record to review approved administrative,
+            attendance and leave information.
+          </p>
+        </div>
+
+        <Users />
+      </div>
+
+      <div className="profileGrid">
+        {people.map((p) => (
+          <button
+            className="profileTile"
+            key={p.id}
+            onClick={() => setSelected(p)}
+          >
+            <div className="profileAvatar">
+              {p.id.slice(-2)}
+            </div>
+
+            <div>
+              <span>{p.id}</span>
+
+              <h3>{p.name}</h3>
+
+              <p>
+                {p.role} · {p.unit} Unit
+              </p>
+            </div>
+
+            <ChevronRight size={19} />
+          </button>
+        ))}
+      </div>
+    </>
+  );
+}
+
+/* =========================================================
+   ATTENDANCE CALENDAR
+========================================================= */
+
+function AttendanceCalendar({ person }) {
+  const leaveDays =
+    person.id === 'P-1042'
+      ? [5, 6, 18, 19, 20, 27]
+      : person.id === 'P-1192'
+        ? [11, 12, 13, 25]
+        : person.id === 'P-0873'
+          ? [7, 8, 9]
+          : person.id === 'P-2011'
+            ? []
+            : [15, 16, 17];
+
+  const absentDays =
+    person.attendance < 92 ? [23] : [];
+
+  const days = Array.from(
+    { length: 30 },
+    (_, i) => i + 1
+  );
+
+  return (
+    <div className="attendanceCalendar">
+      <div className="calendarTop">
+        <div>
+          <h3>August 2026 attendance</h3>
+
+          <p>
+            Marked monthly view · authorized administrative record
+          </p>
+        </div>
+
+        <CalendarDays size={21} />
+      </div>
+
+      <div className="calendarLegend">
+        <span>
+          <i className="present" />
+          Present
+        </span>
+
+        <span>
+          <i className="leave" />
+          Approved leave
+        </span>
+
+        <span>
+          <i className="absent" />
+          Unplanned absence
+        </span>
+
+        <span>
+          <i className="weekend" />
+          Weekend
+        </span>
+      </div>
+
+      <div className="calendarWeek">
+        {['M', 'T', 'W', 'T', 'F', 'S', 'S'].map(
+          (d, i) => (
+            <span key={i}>{d}</span>
+          )
+        )}
+      </div>
+
+      <div className="calendarDays">
+        {Array.from(
+          { length: 5 },
+          (_, i) => (
+            <i key={`blank${i}`} />
+          )
+        )}
+
+        {days.map((day) => {
+          const weekend = (day + 4) % 7 > 4;
+
+          const type = leaveDays.includes(day)
+            ? 'leave'
+            : absentDays.includes(day)
+              ? 'absent'
+              : weekend
+                ? 'weekend'
+                : 'present';
+
+          const label =
+            type === 'leave'
+              ? 'Approved leave'
+              : type === 'absent'
+                ? 'Unplanned absence'
+                : type === 'weekend'
+                  ? 'Weekend'
+                  : 'Present';
+
+          return (
+            <button
+              key={day}
+              className={`day ${type}`}
+              title={`${day} August · ${label}`}
+            >
+              {day}
+
+              {type === 'present' ? (
+                <Check size={10} />
+              ) : type === 'leave' ? (
+                <Minus size={11} />
+              ) : null}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+function MyAttendance() {
+  const me = people[0];
+
+  return (
+    <>
+      <div className="pageHead">
+        <div>
+          <span className="eyebrow">
+            MY ATTENDANCE · PRIVATE VIEW
+          </span>
+
+          <h1>My attendance</h1>
+
+          <p>
+            See your recorded attendance and approved leave days in one clear
+            monthly view.
+          </p>
+        </div>
+
+        <CalendarCheck />
+      </div>
+
+      <div className="leaveSummary">
+        <Card className="leaveMetric">
+          <CalendarCheck />
+
+          <div>
+            <span>Attendance rate</span>
+            <strong>{me.attendance}%</strong>
+            <small>Last 90 days</small>
+          </div>
+        </Card>
+
+        <Card className="leaveMetric">
+          <CalendarDays />
+
+          <div>
+            <span>Leave remaining</span>
+            <strong>{me.leaveLeft} days</strong>
+            <small>Annual entitlement · 24 days</small>
+          </div>
+        </Card>
+
+        <Card className="leaveMetric">
+          <History />
+
+          <div>
+            <span>Leave used</span>
+            <strong>{24 - me.leaveLeft} days</strong>
+            <small>{me.leavePattern}</small>
+          </div>
+        </Card>
+      </div>
+
+      <div className="myAttendanceGrid">
+        <AttendanceCalendar person={me} />
+
+        <Card className="attendanceSummary personalAttendanceSummary">
+          <div className="cardHead">
+            <div>
+              <h2>Attendance status</h2>
+              <p>Your 90-day record</p>
+            </div>
+
+            <CheckCircle2 size={19} />
+          </div>
+
+          <strong className="attendanceBig">
+            {me.attendance}%
+          </strong>
+
+          <span>on-time attendance</span>
+
+          <div className="attendanceBar">
+            <i
+              style={{
+                width: `${me.attendance}%`,
+              }}
+            />
+          </div>
+
+          <div className="patternNote">
+            <CalendarDays size={18} />
+
+            <div>
+              <b>{me.leavePattern}</b>
+
+              <p>
+                Approved leave is shown in amber on your calendar.
+              </p>
+            </div>
+          </div>
+
+          <div className="summaryRows">
+            <div>
+              <span>Recorded present days</span>
+              <b>{Math.round(me.attendance * 0.9)}</b>
+            </div>
+
+            <div>
+              <span>Available leave</span>
+              <b>{me.leaveLeft} days</b>
+            </div>
+          </div>
+        </Card>
+      </div>
+    </>
+  );
+}
+
+/* =========================================================
+   ADMIN PERSON INFO
+========================================================= */
+
+function AdminPersonInfo({
+  person,
+  onBack,
+}) {
+  const leaveUsed = 24 - person.leaveLeft;
+
+  return (
+    <>
+      <button
+        className="back adminBack"
+        onClick={onBack}
+      >
+        ← Back to personnel
+      </button>
+
+      <div className="personHero">
+        <div className="profileAvatar largeAvatar">
+          {person.id.slice(-2)}
+        </div>
+
+        <div>
+          <span className="eyebrow">
+            AUTHORIZED PERSONNEL RECORD · {person.id}
+          </span>
+
+          <h1>{person.name}</h1>
+
+          <p>
+            {person.role} · {person.unit} Unit · Pseudonymous demo record
+          </p>
+        </div>
+
+        <span className="recordStatus">
+          <CheckCircle2 size={15} />
+          Active record
+        </span>
+      </div>
+
+      <div className="adminInfoGrid">
+        <Card>
+          <div className="cardHead">
+            <div>
+              <h2>Personal information</h2>
+
+              <p>
+                Administrative contact and assignment data
+              </p>
+            </div>
+
+            <UserRound size={19} />
+          </div>
+
+          <div className="infoRows">
+            <div>
+              <BriefcaseBusiness />
+              <span>Assignment</span>
+              <b>{person.role}</b>
+            </div>
+
+            <div>
+              <MapPin />
+              <span>Posting</span>
+              <b>{person.unit} Unit · Sector 04</b>
+            </div>
+
+            <div>
+              <Mail />
+              <span>Official email</span>
+              <b>
+                {person.id.toLowerCase()}@saarthi.demo
+              </b>
+            </div>
+
+            <div>
+              <Phone />
+              <span>Duty contact</span>
+              <b>
+                +91 70000 1{person.id.slice(-3)}
+              </b>
+            </div>
+          </div>
+        </Card>
+
+        <Card>
+          <div className="cardHead">
+            <div>
+              <h2>Leave pattern</h2>
+
+              <p>
+                Current leave balance and planning context
+              </p>
+            </div>
+
+            <History size={19} />
+          </div>
+
+          <div className="leaveInsight">
+            <div>
+              <span>Annual entitlement</span>
+
+              <strong>
+                24 <small>days</small>
+              </strong>
+            </div>
+
+            <div>
+              <span>Used this year</span>
+
+              <strong>
+                {leaveUsed} <small>days</small>
+              </strong>
+            </div>
+
+            <div>
+              <span>Remaining</span>
+
+              <strong>
+                {person.leaveLeft} <small>days</small>
+              </strong>
+            </div>
+          </div>
+
+          <div className="patternNote">
+            <CalendarCheck size={18} />
+
+            <div>
+              <b>{person.leavePattern}</b>
+
+              <p>
+                Latest approved leave is reflected directly in the attendance
+                calendar.
+              </p>
+            </div>
+          </div>
+        </Card>
+      </div>
+
+      <div className="adminInfoGrid calendarGrid">
+        <AttendanceCalendar person={person} />
+
+        <Card className="attendanceSummary">
+          <div className="cardHead">
+            <div>
+              <h2>Attendance summary</h2>
+              <p>90-day administrative overview</p>
+            </div>
+
+            <CalendarCheck size={19} />
+          </div>
+
+          <strong className="attendanceBig">
+            {person.attendance}%
+          </strong>
+
+          <span>attendance rate</span>
+
+          <div className="attendanceBar">
+            <i
+              style={{
+                width: `${person.attendance}%`,
+              }}
+            />
+          </div>
+
+          <div className="summaryRows">
+            <div>
+              <span>Present days</span>
+              <b>
+                {Math.round(person.attendance * 0.9)}
+              </b>
+            </div>
+
+            <div>
+              <span>Approved leave</span>
+              <b>{leaveUsed}</b>
+            </div>
+
+            <div>
+              <span>Pattern</span>
+              <b>{person.trend}</b>
+            </div>
+          </div>
+        </Card>
+      </div>
+    </>
+  );
+}
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+function Login({ onLogin }) {
+  const [role, setRole] = useState('welfare');
+
+  return (
+    <div className="login">
+      <div className="loginShell">
+        <div className="loginVisual">
+          <span className="eyebrow">
+            EARLY-WARNING INTELLIGENCE
+          </span>
+
+          <h2>
+            See the signal.
+            <br />
+            <span>Support the person.</span>
+          </h2>
+
+          <p>
+            AI connects workload, duty, deployment and optional wellness
+            patterns into an explainable welfare signal.
+          </p>
+
+          <AIOrb />
+        </div>
+
+        <div className="loginCard">
+          <div className="logo large">
+            <Shield size={30} />
+          </div>
+
+          <span className="eyebrow">
+            SECURE WELFARE PLATFORM
+          </span>
+
+          <h1>
+            SAARTHI <span>AI</span>
+          </h1>
+
+          <p>
+            Predictive personnel welfare intelligence — designed for early
+            support, privacy and human oversight.
+          </p>
+
+          <div className="loginForm">
+            <label>
+              Demo role
+
+              <select
+                value={role}
+                onChange={(e) => setRole(e.target.value)}
+              >
+                {Object.entries(roles).map(([k, v]) => (
+                  <option value={k} key={k}>
+                    {v}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <label>
+              Username
+
+              <input value={role} readOnly />
+            </label>
+
+            <label>
+              Password
+
+              <input
+                value="demo123"
+                readOnly
+                type="password"
+              />
+            </label>
+
+            <button
+              className="primary full"
+              onClick={() => onLogin(role)}
+            >
+              Enter secure workspace
+              <ChevronRight size={17} />
+            </button>
+          </div>
+
+          <small className="demoNote">
+            Hackathon prototype · Synthetic data only · No real personnel data
+          </small>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* =========================================================
+   MAIN APP
+========================================================= */
+
+function App() {
+  const [role, setRole] = useState('welfare');
+  const [page, setPage] = useState('dashboard');
+  const [selected, setSelected] = useState(null);
+  const [sidebar, setSidebar] = useState(false);
+  const [logged, setLogged] = useState(false);
+
+  const landing = (r) =>
+    r === 'personnel'
+      ? 'home'
+      : r === 'commander'
+        ? 'overview'
+        : r === 'admin'
+          ? 'admin-personnel'
+          : 'dashboard';
+
+  if (!logged) {
+    return (
+      <Login
+        onLogin={(r) => {
+          setRole(r);
+          setPage(landing(r));
+          setLogged(true);
+        }}
+      />
+    );
+  }
+
+  let content;
+
+  if (role === 'personnel') {
+    content =
+      page === 'privacy' ? (
+        <Privacy />
+      ) : page === 'checkin' ? (
+        <DailyCheckin />
+      ) : page === 'my-attendance' ? (
+        <MyAttendance />
+      ) : (
+        <WellnessHome />
+      );
+  } else if (role === 'commander') {
+    content =
+      page === 'workload' ? (
+        <WorkloadAnalytics />
+      ) : (
+        <Commander page={page} />
+      );
+  } else if (role === 'admin') {
+    content = selected ? (
+      <AdminPersonInfo
+        person={selected}
+        onBack={() => setSelected(null)}
+      />
+    ) : page === 'admin-personnel' ? (
+      <AdminPersonnel setSelected={setSelected} />
+    ) : page === 'admin-attendance' ? (
+      <AdminAttendance setSelected={setSelected} />
+    ) : page === 'admin-history' ? (
+      <AdminHistory setSelected={setSelected} />
+    ) : page === 'audit' ? (
+      <Audit />
+    ) : (
+      <Privacy />
+    );
+  } else {
+    content = selected ? (
+      <PersonDetail
+        person={selected}
+        onBack={() => setSelected(null)}
+        onIntervene={() =>
+          alert(
+            'Welfare review created in demo mode. Follow-up has been scheduled.'
+          )
+        }
+      />
+    ) : page === 'dashboard' ? (
+      <Dashboard
+        setSelected={setSelected}
+        onViewAll={() => setPage('reviews')}
+      />
+    ) : page === 'reviews' ? (
+      <PriorityReviews setSelected={setSelected} />
+    ) : page === 'personnel' ? (
+      <PersonnelList setSelected={setSelected} />
+    ) : page === 'interventions' ? (
+      <Interventions />
+    ) : page === 'privacy' ? (
+      <Privacy />
+    ) : (
+      <Audit />
+    );
+  }
+
+  return (
+    <div className="app">
+      <Header
+        role={role}
+        onLogout={() => setLogged(false)}
+        onMenu={() => setSidebar(!sidebar)}
+      />
+
+      <Sidebar
+        role={role}
+        page={page}
+        setPage={(p) => {
+          setSelected(null);
+          setPage(p);
+          setSidebar(false);
+        }}
+        open={sidebar}
+      />
+
+      <main>{content}</main>
+
+      <div className="roleSwitcher">
+        <span>Demo role</span>
+
+        <select
+          value={role}
+          onChange={(e) => {
+            const r = e.target.value;
+
+            setRole(r);
+            setSelected(null);
+            setPage(landing(r));
+          }}
+        >
+          {Object.entries(roles).map(([k, v]) => (
+            <option value={k} key={k}>
+              {v}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+  );
+}
+
+/* =========================================================
+   REACT ENTRY POINT
+========================================================= */
+
+createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+);
